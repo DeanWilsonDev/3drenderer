@@ -67,8 +67,10 @@ void draw_pixel(int x, int y, uint32_t color) {
 }
 
 void draw_rect(int x, int y, int width, int height, uint32_t color) {
-  int i_max = y + height;
-  int j_max = x + width;
+  int w = x + width > window_width ? window_width - x : width;
+  int h = x + height > window_height ? window_height- y : height;
+  int i_max = y + h;
+  int j_max = x + w;
   for (int i = y; i < i_max; i++) {
     for (int j = x; j < j_max; j++) {
       draw_pixel(j, i, color);
