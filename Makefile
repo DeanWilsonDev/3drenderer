@@ -9,7 +9,7 @@ SDL_LIBS   := $(shell pkg-config --libs sdl2)
 CFLAGS += $(SDL_CFLAGS)
 LDLIBS += $(SDL_LIBS)
 
-TARGET := renderer 
+TARGET := build/renderer 
 SRCS   := $(wildcard src/*.c)
 OBJS   := $(SRCS:src/%.c=build/%.o)
 
