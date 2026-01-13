@@ -17,7 +17,7 @@ void draw_grid(int grid_width, uint32_t color);
 void draw_grid_dotted(int grid_width, uint32_t color);
 void draw_pixel(int x, int y, uint32_t color);
 void draw_rect(int x, int y, int width, int height, uint32_t color);
+int calculate_visible_size(int window_dimension, int position, int size);
 void render_color_buffer(void);
 void clear_color_buffer(uint32_t color);
 void destroy_window(void);
-

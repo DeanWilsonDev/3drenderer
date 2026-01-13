@@ -22,9 +22,14 @@ bool initialize_window(void) {
   window_width = display_mode.w;
   window_height = display_mode.h;
 
-  window = SDL_CreateWindow("Renderer", SDL_WINDOWPOS_CENTERED,
-                            SDL_WINDOWPOS_CENTERED, window_width, window_height,
-                            SDL_WINDOW_BORDERLESS);
+  window = SDL_CreateWindow(
+      "Renderer",
+      SDL_WINDOWPOS_CENTERED,
+      SDL_WINDOWPOS_CENTERED,
+      window_width,
+      window_height,
+      SDL_WINDOW_BORDERLESS
+  );
 
   if (!window) {
     fprintf(stderr, "Error creating SDL window.\n");
@@ -66,11 +71,22 @@ void draw_pixel(int x, int y, uint32_t color) {
   }
 }
 
+int calculate_visible_size(int window_dimension, int position, int size) {
+  int s = size;
+  if (position + size > window_dimension) {
+    s = window_dimension - position;
+  } else if (position < 0) {
+    s = size - position;
+  }
+  return s >= 0 ? s : 0;
+}
+
 void draw_rect(int x, int y, int width, int height, uint32_t color) {
-  int w = x + width > window_width ? window_width - x : width;
-  int h = x + height > window_height ? window_height- y : height;
-  int i_max = y + h;
-  int j_max = x + w;
+
+  int w = calculate_visible_size(window_width, x, width);
+  int h = calculate_visible_size(window_height, y, height);
+  int i_max = y + w;
+  int j_max = x + h;
   for (int i = y; i < i_max; i++) {
     for (int j = x; j < j_max; j++) {
       draw_pixel(j, i, color);
@@ -79,8 +95,12 @@ void draw_rect(int x, int y, int width, int height, uint32_t color) {
 }
 
 void render_color_buffer(void) {
-  SDL_UpdateTexture(color_buffer_texture, NULL, color_buffer,
-                    (int)(window_width * sizeof(uint32_t)));
+  SDL_UpdateTexture(
+      color_buffer_texture,
+      NULL,
+      color_buffer,
+      (int)(window_width * sizeof(uint32_t))
+  );
 
   SDL_RenderCopy(renderer, color_buffer_texture, NULL, NULL);
 }
@@ -88,7 +108,7 @@ void render_color_buffer(void) {
 void clear_color_buffer(uint32_t color) {
   for (int y = 0; y < window_height; y++) {
     for (int x = 0; x < window_width; x++) {
-        draw_pixel(x, y, color);
+      draw_pixel(x, y, color);
     }
   }
 }
